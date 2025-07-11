@@ -1,0 +1,73 @@
+#!/bin/bash
+
+# === Konfigurasi dasar ===
+IP=$(curl -s ifconfig.me)
+domain=$(cat /etc/xray/domain)
+user="vl$(</dev/urandom tr -dc a-z0-9 | head -c6)"
+uuid=$(uuidgen)
+hari="7"
+exp=$(date -d "$hari days" +"%Y-%m-%d")
+
+# === Tambahkan ke config.json TLS & NTLS ===
+cat >> /etc/xray/config.json <<EOF
+### $user $exp
+{
+  "id": "$uuid",
+  "email": "$user"
+}
+EOF
+
+# === Generate link VLESS TLS ===
+link_tls="vless://$uuid@$domain:443?encryption=none&security=tls&type=ws&host=$domain&path=/vless#$user"
+
+# === Generate link VLESS Non-TLS ===
+link_ntls="vless://$uuid@$domain:80?encryption=none&security=none&type=ws&host=$domain&path=/vless#$user"
+
+# === Simpan akun ke database lokal ===
+echo "$user $exp $uuid vless" >> /etc/xray/akun-vless.txt
+
+# === Restart Xray service ===
+systemctl restart xray
+
+# === Tampilkan ke layar (CLI) ===
+clear
+echo -e "\e[35m======= XRAY VLESS ACCOUNT =======\e[0m"
+echo -e "Username : $user"
+echo -e "Domain   : $domain"
+echo -e "UUID     : $uuid"
+echo -e "Expired  : $exp"
+echo -e ""
+echo -e "TLS Link:"
+echo -e "$link_tls"
+echo -e ""
+echo -e "Non-TLS Link:"
+echo -e "$link_ntls"
+echo -e "\e[35m==================================\e[0m"
+
+# === Kirim Notifikasi Telegram ===
+BOT_TOKEN=$(cat /etc/xydark/bot-token)
+CHAT_ID=$(cat /etc/xydark/owner-id)
+
+MSG="✅ *VLESS WS Account Created*
+
+👤 *Username:* \`$user\`
+📆 *Expired:* \`$exp\`
+
+🌐 *IP VPS:* \`$IP\`
+🌍 *Domain:* \`$domain\`
+🆔 *UUID:* \`$uuid\`
+
+🔐 *TLS Link:*
+\`\`\`
+$link_tls
+\`\`\`
+
+🔓 *Non-TLS Link:*
+\`\`\`
+$link_ntls
+\`\`\`"
+
+curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
+-d chat_id="$CHAT_ID" \
+-d text="$MSG" \
+-d parse_mode="Markdown"
