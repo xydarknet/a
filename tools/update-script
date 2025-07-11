@@ -2,7 +2,7 @@
 # ◦•●◉✿ update-script by xydark ✿◉●•◦
 
 echo -e "\e[1;36m▶ Mengunduh file terbaru dari GitHub repo xydarknet/x...\e[0m"
-base_url="https://raw.githubusercontent.com/xydarknet/x/main"
+base_url="https://raw.githubusercontent.com/xydarknet/a/main"
 
 files=(
   "menu/menu.sh:/usr/bin/menu"
