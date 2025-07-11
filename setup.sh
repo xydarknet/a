@@ -80,6 +80,12 @@ else
 fi
 
 
+#INSTALL MENU TUNNEL
+echo "▶ Mengunduh script menu..."
+wget -qO /usr/bin/menu https://raw.githubusercontent.com/xydarknet/a/main/menu.sh
+chmod +x /usr/bin/menu
+
+
 # Install menu-createxray
 echo "▶ Mengunduh script menu-createxray..."
 wget -q -O /usr/bin/menu-createxray https://raw.githubusercontent.com/xydarknet/x/main/menu/menu-createxray.sh
