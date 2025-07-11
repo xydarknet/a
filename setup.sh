@@ -95,6 +95,27 @@ if [[ ! -s /etc/xydark/owner-id ]]; then
   echo "$CID" > /etc/xydark/owner-id
 fi
 
+
+# === DOWNLOAD SEMUA SCRIPT ADD XRAY WS + gRPC ===
+echo "▶ Mengunduh semua script XRAY add..."
+
+base_url="https://raw.githubusercontent.com/xydarknet/a/main/Xray"
+
+declare -a files=(
+  addvmess
+  addvless
+  addtrojan
+  addvmessgrpc
+  addvlessgrpc
+  addtrojangrpc
+)
+
+for f in "${files[@]}"; do
+  wget -qO /usr/bin/$f "$base_url/$f"
+  chmod +x /usr/bin/$f
+done
+
+
 # Generate config.json
 cat > /etc/xydark/config.json <<EOF
 {"token":"$(cat /etc/xydark/bot-token)","owner_id":$(cat /etc/xydark/owner-id)}
