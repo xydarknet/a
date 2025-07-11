@@ -85,6 +85,13 @@ echo "▶ Mengunduh script menu..."
 wget -qO /usr/bin/menu https://raw.githubusercontent.com/xydarknet/a/main/menu.sh
 chmod +x /usr/bin/menu
 
+#INSTALL FITUR DI MENU TUNNEL
+echo "▶ Mengunduh script XRAY..."
+wget -qO /usr/bin/menu-xray https://raw.githubusercontent.com/xydarknet/a/main/menu/menu-xray.sh
+chmod +x /usr/bin/menu-xray
+
+
+
 
 # Install menu-createxray
 echo "▶ Mengunduh script menu-createxray..."
